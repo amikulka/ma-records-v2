@@ -10,38 +10,23 @@ datasource db {
     relationMode = "prisma"
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model Album {
+    id          String        @id @default(cuid())
+    createdAt   DateTime      @default(now())
+    album       String
+    artist      String
+    track_count Int
+    disk_count  Int
+    art_url     String
+    users       UsersAlbums[]
 }
 
-// model Album {
-//     id          String        @id @default(cuid())
-//     createdAt   DateTime      @default(now())
-//     updatedAt   DateTime      @updatedAt
-//     album       String
-//     artist      String
-//     track_count Int
-//     disk_count  Int
-//     art_url     String
-//     users       UsersAlbums[]
-// }
+model UsersAlbums {
+    ownerId   String
+    album     Album    @relation(fields: [albumId], references: [id])
+    albumId   String // relation scalar field (used in the `@relation` attribute above)
+    createdAt DateTime @default(now())
 
-// model User {
-//     userId    String        @id
-//     createdAt DateTime      @default(now())
-//     updatedAt DateTime      @updatedAt
-//     albums    UsersAlbums[]
-// }
-
-// model UsersAlbums {
-//     user       User     @relation(fields: [userId], references: [userId])
-//     userId     String // relation scalar field (used in the `@relation` attribute above)
-//     album      Album    @relation(fields: [albumId], references: [id])
-//     albumId    String // relation scalar field (used in the `@relation` attribute above)
-//     assignedAt DateTime @default(now())
-//     assignedBy String
-
-//     @@id([userId, albumId])
-// }
+    @@id([albumId])
+    @@index([albumId, ownerId])
+}
