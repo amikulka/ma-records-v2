@@ -5,7 +5,7 @@ import Link from "next/link";
 import { api } from "@/utils/api";
 
 const Home: NextPage = () => {
-  const { data } = api.albums.getAll.useQuery();
+  const { data } = api.album.getAll.useQuery();
   console.log(data);
 
   return (

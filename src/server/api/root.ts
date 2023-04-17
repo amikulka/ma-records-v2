@@ -7,7 +7,7 @@ import { albumsRouter } from "./routers/albums";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  albums: albumsRouter,
+  album: albumsRouter,
 });
 
 // export type definition of API
