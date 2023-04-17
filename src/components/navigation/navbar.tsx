@@ -1,10 +1,10 @@
 import { useState } from "react";
 import Link from "next/link";
-import { UserButton, useAuth } from "@clerk/nextjs";
+import { SignInButton, UserButton, useAuth } from "@clerk/nextjs";
 
 export default function NavBar() {
   const [navbar, setNavbar] = useState(false);
-  const { userId } = useAuth();
+  const { isSignedIn } = useAuth();
 
   return (
     <nav className="w-full bg-slate-100 shadow">
@@ -58,23 +58,26 @@ export default function NavBar() {
               navbar ? "block" : "hidden"
             }`}
           >
-            <ul
-              className="items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0"
-              onClick={() => setNavbar(false)}
-            >
-              <li className="text-gray-600 hover:text-blue-600">
-                <Link href={`/`}>My Records</Link>
-              </li>
-              <li className="text-gray-600 hover:text-blue-600">
-                <Link href="/admin">Admin</Link>
-              </li>
-              <li className="text-gray-600 hover:text-blue-600">
-                <Link href="/admin/add">Add Album</Link>
-              </li>
-              <li>
-                <UserButton />
-              </li>
-            </ul>
+            {!!isSignedIn && (
+              <ul
+                className="items-center justify-center space-y-8 md:flex md:space-x-6 md:space-y-0"
+                onClick={() => setNavbar(false)}
+              >
+                <li className="text-gray-600 hover:text-blue-600">
+                  <Link href={`/`}>My Records</Link>
+                </li>
+                <li className="text-gray-600 hover:text-blue-600">
+                  <Link href="/admin">Admin</Link>
+                </li>
+                <li className="text-gray-600 hover:text-blue-600">
+                  <Link href="/admin/add">Add Album</Link>
+                </li>
+                <li>
+                  <UserButton />
+                </li>
+              </ul>
+            )}
+            {!isSignedIn && <SignInButton />}
           </div>
         </div>
       </div>
