@@ -63,7 +63,7 @@ export default function NavBar() {
               onClick={() => setNavbar(false)}
             >
               <li className="text-gray-600 hover:text-blue-600">
-                <Link href={`/records/${userId}`}>My Records</Link>
+                <Link href={`/`}>My Records</Link>
               </li>
               <li className="text-gray-600 hover:text-blue-600">
                 <Link href="/admin">Admin</Link>
