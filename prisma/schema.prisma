@@ -1,17 +1,41 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
     provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "sqlite"
-    url      = env("DATABASE_URL")
+    provider     = "mysql"
+    url          = env("DATABASE_URL")
+    relationMode = "prisma"
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model Album {
+    id          String        @id @default(cuid())
+    createdAt   DateTime      @default(now())
+    updatedAt   DateTime      @updatedAt
+    album       String
+    artist      String
+    track_count Int
+    disk_count  Int
+    art_url     String
+    users       UsersAlbums[]
+}
+
+model User {
+    userId    String        @id
+    createdAt DateTime      @default(now())
+    updatedAt DateTime      @updatedAt
+    albums    UsersAlbums[]
+}
+
+model UsersAlbums {
+    user       User     @relation(fields: [userId], references: [userId])
+    userId     String // relation scalar field (used in the `@relation` attribute above)
+    album      Album    @relation(fields: [albumId], references: [id])
+    albumId    String // relation scalar field (used in the `@relation` attribute above)
+    assignedAt DateTime @default(now())
+    assignedBy String
+
+    @@id([userId, albumId])
 }
