@@ -23,17 +23,15 @@ export default function AddRecordForm({
 }: Props) {
   return (
     <div className="ml-10 mt-8">
-      <div className="max-w-xs p-2.5">
+      <div className="max-w-sm p-2.5">
         <InputWithLabel
-          label={'Artist'}
           placeholder={'Artist name'}
           handleChange={handleArtistChange}
           query={artistSearch}
         />
       </div>
-      <div className="max-w-xs p-2.5">
+      <div className="max-w-sm p-2.5">
         <InputWithLabel
-          label={'Album'}
           placeholder={'Album name'}
           handleChange={handleAlbumChange}
           query={albumSearch}

@@ -9,7 +9,7 @@ export default function NavBar() {
   const userId = user?.id
 
   return (
-    <nav className="w-full bg-slate-100 shadow">
+    <nav className="w-full bg-gray-900 shadow">
       <div className="mx-auto justify-between px-4 md:flex md:items-center md:px-8 lg:max-w-7xl">
         <div className="flex items-center justify-between py-3 md:block md:py-5">
           <Link href="/">
@@ -18,7 +18,7 @@ export default function NavBar() {
 
           <div className="flex items-center justify-center gap-2 md:hidden">
             <button
-              className="rounded-md p-2 text-gray-700 outline-none focus:border focus:border-gray-400"
+              className="rounded-md p-2 outline-none focus:border focus:border-gray-400"
               onClick={() => setNavbar(!navbar)}
             >
               {navbar ? (
@@ -67,10 +67,10 @@ export default function NavBar() {
                   className=" flex flex-col items-center justify-center space-y-6 md:flex-row md:space-x-6 md:space-y-0"
                   onClick={() => setNavbar(false)}
                 >
-                  <li className="text-gray-600 hover:text-blue-600">
+                  <li className="text-gray-200 hover:text-gray-300">
                     <Link href={`/myrecords/${userId || ''}`}>My Records</Link>
                   </li>
-                  <li className="text-gray-600 hover:text-blue-600">
+                  <li className="text-gray-200 hover:text-gray-300">
                     <Link href="/admin/add">Add Albums</Link>
                   </li>
                 </ul>
