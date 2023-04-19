@@ -10,7 +10,7 @@ datasource db {
     relationMode = "prisma"
 }
 
-model Album {
+model Albums {
     id          String        @id @default(cuid())
     createdAt   DateTime      @default(now())
     album       String
@@ -22,11 +22,11 @@ model Album {
 }
 
 model UsersAlbums {
+    id        String   @id @default(cuid())
     ownerId   String
-    album     Album    @relation(fields: [albumId], references: [id])
+    album     Albums   @relation(fields: [albumId], references: [id])
     albumId   String // relation scalar field (used in the `@relation` attribute above)
     createdAt DateTime @default(now())
 
-    @@id([albumId])
     @@index([albumId, ownerId])
 }

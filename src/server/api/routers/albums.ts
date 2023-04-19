@@ -1,9 +1,76 @@
-import { z } from "zod";
+import { z } from 'zod'
 
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import {
+  createTRPCRouter,
+  privateProcedure,
+  publicProcedure,
+} from '@/server/api/trpc'
 
 export const albumsRouter = createTRPCRouter({
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.album.findMany();
-  }),
-});
+  getAll: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      })
+    )
+    .query(({ ctx, input }) => {
+      return ctx.prisma.usersAlbums.findMany({
+        where: {
+          ownerId: input.userId,
+        },
+        include: {
+          album: true,
+        },
+      })
+    }),
+  // addAlbum: privateProcedure
+  //   .input(
+  //     z.object({
+  //       album: z.object({
+  //         id: z.string(),
+  //         album: z.string(),
+  //         artist: z.string(),
+  //         track_count: z.number(),
+  //         disk_count: z.number(),
+  //         art_url: z.string(),
+  //       }),
+  //     })
+  //   )
+  //   .mutation(async ({ ctx, input }) => {
+  //     const userId = ctx.userId
+  //     const album = await ctx.prisma.album.upsert({
+  //       where: {
+  //         id: input.album.id,
+  //       },
+  //       update: {},
+  //       create: input.album,
+  //     })
+  //     const UserAlbum = await ctx.prisma.usersAlbums.create({
+  //       data: {
+  //         ownerId: userId,
+  //         albumId: album.id,
+  //       },
+  //     })
+  //     return {
+  //       album,
+  //       UserAlbum,
+  //     }
+  //   }),
+})
+
+// model Album {
+//   id          String        @id @default(cuid())
+//   createdAt   DateTime      @default(now())
+//   album       String
+//   artist      String
+//   track_count Int
+//   disk_count  Int
+//   art_url     String
+//   users       UsersAlbums[]
+// }
+
+// model UsersAlbums {
+//   ownerId   String
+//   album     Album    @relation(fields: [albumId], references: [id])
+//   albumId   String // relation scalar field (used in the `@relation` attribute above)
+//   createdAt DateTime @default(now())
