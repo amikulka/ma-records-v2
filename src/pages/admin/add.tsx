@@ -4,7 +4,8 @@ import { useState } from 'react'
 import axios, { type AxiosResponse } from 'axios'
 import SimpleNotification from '@/components/notification/SimpleNotification'
 import Head from 'next/head'
-import type { AlbumInfoFromAPI } from '@/utils/types'
+import type { AlbumInfoFromAPI, AlbumToAdd } from '@/utils/types'
+import { api } from '@/utils/api'
 
 export default function AddAlbum() {
   const [artistSearch, setArtistSearch] = useState('')
@@ -13,7 +14,7 @@ export default function AddAlbum() {
     AlbumInfoFromAPI[] | null
   >(null)
   const [show, setShow] = useState(false)
-
+  const { mutate } = api.albums.addAlbum.useMutation()
   function handleArtistChange(e: React.FormEvent<HTMLInputElement>) {
     setArtistSearch(e.currentTarget.value)
   }
@@ -30,17 +31,20 @@ export default function AddAlbum() {
     setArtistSearch('')
     setAlbumSearch('')
   }
-  // function handleAddAlbum(album: Album) {
-  //   axios.post(`/api/albums`, album).then(() => {
-  //     setShow(true)
-  //     setTimeout(() => {
-  //       setShow(false)
-  //     }, 6000)
-  //     setArtistSearch('')
-  //     setAlbumSearch('')
-  //     setAlbumSearchList(null)
-  //   })
-  // }
+  function handleAddAlbum(album: AlbumToAdd) {
+    try {
+      mutate({ album })
+      setShow(true)
+      setTimeout(() => {
+        setShow(false)
+      }, 6000)
+      setArtistSearch('')
+      setAlbumSearch('')
+      setAlbumSearchList(null)
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
   function searchForAlbums(artist: string, album: string) {
     axios
@@ -79,11 +83,7 @@ export default function AddAlbum() {
         {albumSearchList && (
           <SearchResultsList
             albumSearchList={albumSearchList}
-            handleAdd={
-              /*handleAddAlbum*/ () => {
-                return
-              }
-            }
+            handleAdd={handleAddAlbum}
           />
         )}
         <SimpleNotification

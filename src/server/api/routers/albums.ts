@@ -23,39 +23,39 @@ export const albumsRouter = createTRPCRouter({
         },
       })
     }),
-  // addAlbum: privateProcedure
-  //   .input(
-  //     z.object({
-  //       album: z.object({
-  //         id: z.string(),
-  //         album: z.string(),
-  //         artist: z.string(),
-  //         track_count: z.number(),
-  //         disk_count: z.number(),
-  //         art_url: z.string(),
-  //       }),
-  //     })
-  //   )
-  //   .mutation(async ({ ctx, input }) => {
-  //     const userId = ctx.userId
-  //     const album = await ctx.prisma.album.upsert({
-  //       where: {
-  //         id: input.album.id,
-  //       },
-  //       update: {},
-  //       create: input.album,
-  //     })
-  //     const UserAlbum = await ctx.prisma.usersAlbums.create({
-  //       data: {
-  //         ownerId: userId,
-  //         albumId: album.id,
-  //       },
-  //     })
-  //     return {
-  //       album,
-  //       UserAlbum,
-  //     }
-  //   }),
+  addAlbum: privateProcedure
+    .input(
+      z.object({
+        album: z.object({
+          id: z.string(),
+          album: z.string(),
+          artist: z.string(),
+          track_count: z.number(),
+          disk_count: z.number(),
+          art_url: z.string(),
+        }),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.userId
+      const album = await ctx.prisma.albums.upsert({
+        where: {
+          id: input.album.id,
+        },
+        update: {},
+        create: input.album,
+      })
+      const UserAlbum = await ctx.prisma.usersAlbums.create({
+        data: {
+          ownerId: userId,
+          albumId: album.id,
+        },
+      })
+      return {
+        album,
+        UserAlbum,
+      }
+    }),
 })
 
 // model Album {

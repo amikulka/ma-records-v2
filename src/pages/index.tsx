@@ -10,10 +10,6 @@ const Home: NextPage = () => {
   if (!user) return <div>Something went wrong...</div>
   const userId = user.id
   const { data } = api.albums.getAll.useQuery({ userId })
-  console.log(user)
-  // console.log(data)
-
-  // const { mutate } = api.album.addAlbum.useMutation()
 
   return (
     <>
