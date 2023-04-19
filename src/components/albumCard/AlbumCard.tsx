@@ -28,7 +28,7 @@ export default function AlbumCard({
       <div className="w-72 rounded-lg border-2 border-solid bg-slate-50 shadow-lg">
         <Image
           className="rounded-t-lg border-b-2"
-          src={album.art_url}
+          src={album.art_url || '/album_placeholder.png'}
           alt="album artwork"
           width={285}
           height={285}
@@ -55,7 +55,7 @@ export default function AlbumCard({
               className="mt-5 w-full rounded border border-transparent bg-green-600 px-0 py-1.5 text-center text-xs font-medium text-white shadow-sm hover:bg-slate-600 focus:outline-none focus:ring-1 focus:ring-slate-500 focus:ring-offset-1"
               onClick={handleAddClick}
             >
-              Remove
+              Add
             </button>
           )}
         </div>

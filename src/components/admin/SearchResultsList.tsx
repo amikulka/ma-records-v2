@@ -2,15 +2,10 @@ import AlbumCard from '@/components/albumCard/AlbumCard'
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import type { Albums } from '@prisma/client'
-export interface album {
-  album: string
-  artist: string
-  disk_count: number
-  mbid: string
-  track_count: number
-}
+import type { AlbumInfoFromAPI } from '@/utils/types'
+
 type Props = {
-  albumSearchList: album[]
+  albumSearchList: AlbumInfoFromAPI[]
   handleAdd: () => void
 }
 
@@ -21,32 +16,39 @@ export default function SearchResultsList({
   const [displayList, setDisplayList] = useState<Albums[] | null>(null)
   useEffect(() => {
     const artWork = Promise.all(
-      albumSearchList.map(async (album) => {
-        const art = await axios
+      albumSearchList.map((album) => {
+        return axios
           .get(`/api/mb_album_art`, {
             params: {
               mbid: album.mbid,
             },
           })
+          .then((results) => {
+            return results.data as string
+          })
           .catch((err) => {
             console.log(err)
           })
-        return art as string
       })
-    )
-    setDisplayList(
-      albumSearchList.map((album, index) => {
-        return {
-          id: album.mbid,
-          createdAt: new Date(),
-          album: album.album,
-          artist: album.artist,
-          track_count: album.track_count,
-          disk_count: album.disk_count,
-          art_url: artWork[index] as string,
-        }
-      })
-    )
+    ).then((artworkArray) => {
+      setDisplayList(
+        albumSearchList.map((album, index) => {
+          let albumArt = ''
+          if (artworkArray[index]) {
+            albumArt = artworkArray[index] as string
+          }
+          return {
+            id: album.mbid,
+            createdAt: new Date(),
+            album: album.album,
+            artist: album.artist,
+            track_count: album.track_count,
+            disk_count: album.disk_count,
+            art_url: albumArt,
+          }
+        })
+      )
+    })
   }, [albumSearchList])
   return (
     <div className="flex flex-wrap justify-center md:justify-start">

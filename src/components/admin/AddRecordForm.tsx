@@ -1,14 +1,15 @@
+import type { AlbumInfoFromAPI } from '@/utils/types'
 import InputWithLabel from '../input/InputWithLabel'
 import StyledButton from './StyledButton'
 
 type Props = {
-  searchForAlbums: () => void
+  searchForAlbums: (artist: string, album: string) => void
   handleArtistChange: React.ChangeEventHandler<HTMLInputElement>
   handleAlbumChange: React.ChangeEventHandler<HTMLInputElement>
   handleSearchClick: React.MouseEventHandler<HTMLButtonElement>
   artistSearch: string
   albumSearch: string
-  albumSearchList: any[] | null
+  albumSearchList: AlbumInfoFromAPI[] | null
   handleClearClick: React.MouseEventHandler<HTMLButtonElement>
 }
 export default function AddRecordForm({

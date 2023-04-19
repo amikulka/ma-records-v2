@@ -1,14 +1,17 @@
 import AddRecordForm from '@/components/admin/AddRecordForm'
 import SearchResultsList from '@/components/admin/SearchResultsList'
 import { useState } from 'react'
-import axios from 'axios'
+import axios, { type AxiosResponse } from 'axios'
 import SimpleNotification from '@/components/notification/SimpleNotification'
 import Head from 'next/head'
+import type { AlbumInfoFromAPI } from '@/utils/types'
 
 export default function AddAlbum() {
   const [artistSearch, setArtistSearch] = useState('')
   const [albumSearch, setAlbumSearch] = useState('')
-  const [albumSearchList, setAlbumSearchList] = useState(null)
+  const [albumSearchList, setAlbumSearchList] = useState<
+    AlbumInfoFromAPI[] | null
+  >(null)
   const [show, setShow] = useState(false)
 
   function handleArtistChange(e: React.FormEvent<HTMLInputElement>) {
@@ -27,17 +30,17 @@ export default function AddAlbum() {
     setArtistSearch('')
     setAlbumSearch('')
   }
-  function handleAddAlbum(album: Album) {
-    axios.post(`/api/albums`, album).then(() => {
-      setShow(true)
-      setTimeout(() => {
-        setShow(false)
-      }, 6000)
-      setArtistSearch('')
-      setAlbumSearch('')
-      setAlbumSearchList(null)
-    })
-  }
+  // function handleAddAlbum(album: Album) {
+  //   axios.post(`/api/albums`, album).then(() => {
+  //     setShow(true)
+  //     setTimeout(() => {
+  //       setShow(false)
+  //     }, 6000)
+  //     setArtistSearch('')
+  //     setAlbumSearch('')
+  //     setAlbumSearchList(null)
+  //   })
+  // }
 
   function searchForAlbums(artist: string, album: string) {
     axios
@@ -47,10 +50,11 @@ export default function AddAlbum() {
           artist: artist,
         },
       })
-      .then((results) => {
+      .then((results: AxiosResponse<AlbumInfoFromAPI[]>) => {
         console.log(results.data)
         setAlbumSearchList(results.data)
       })
+      .catch((err) => console.log(err))
   }
   return (
     <>
@@ -75,7 +79,11 @@ export default function AddAlbum() {
         {albumSearchList && (
           <SearchResultsList
             albumSearchList={albumSearchList}
-            handleAdd={handleAddAlbum}
+            handleAdd={
+              /*handleAddAlbum*/ () => {
+                return
+              }
+            }
           />
         )}
         <SimpleNotification
