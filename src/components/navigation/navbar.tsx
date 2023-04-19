@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import Link from 'next/link'
-import { SignInButton, UserButton, useAuth } from '@clerk/nextjs'
+import { SignInButton, UserButton, useAuth, useUser } from '@clerk/nextjs'
 
 export default function NavBar() {
   const [navbar, setNavbar] = useState(false)
   const { isSignedIn } = useAuth()
+  const { user } = useUser()
+  const userId = user?.id
 
   return (
     <nav className="w-full bg-slate-100 shadow">
@@ -66,7 +68,7 @@ export default function NavBar() {
                   onClick={() => setNavbar(false)}
                 >
                   <li className="text-gray-600 hover:text-blue-600">
-                    <Link href={`/`}>My Records</Link>
+                    <Link href={`/myrecords/${userId || ''}`}>My Records</Link>
                   </li>
                   <li className="text-gray-600 hover:text-blue-600">
                     <Link href="/admin/add">Add Albums</Link>
