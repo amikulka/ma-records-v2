@@ -5,7 +5,6 @@ import {
   privateProcedure,
   publicProcedure,
 } from '@/server/api/trpc'
-import { User } from '@clerk/nextjs/dist/api'
 
 export const albumsRouter = createTRPCRouter({
   getAll: publicProcedure

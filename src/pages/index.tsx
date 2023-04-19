@@ -1,15 +1,15 @@
 import { type NextPage } from 'next'
 import Head from 'next/head'
 
-import { api } from '@/utils/api'
-import AlbumCard from '@/components/albumCard/AlbumCard'
-import { useUser } from '@clerk/nextjs'
+import { SignedOut, RedirectToSignUp, useUser } from '@clerk/nextjs'
+import { useRouter } from 'next/router'
 
 const Home: NextPage = () => {
   const { user } = useUser()
-  if (!user) return <div>Something went wrong...</div>
-  const userId = user.id
-  const { data } = api.albums.getAll.useQuery({ userId })
+  const router = useRouter()
+  if (user) {
+    router.push(`/myrecords/${user.id}`).catch((err) => console.log(err))
+  }
 
   return (
     <>
@@ -19,11 +19,9 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col items-center justify-center">
-        <div className="flex flex-wrap justify-center md:justify-start">
-          {data?.map((album) => (
-            <AlbumCard key={album.id} album={album.album} cardType="display" />
-          ))}
-        </div>
+        <SignedOut>
+          <RedirectToSignUp />
+        </SignedOut>
       </main>
     </>
   )
