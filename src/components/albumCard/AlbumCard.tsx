@@ -1,6 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 import type { Albums } from '@prisma/client'
+import { api } from '@/utils/api'
 
 type Props = {
   album: Albums
@@ -15,9 +16,10 @@ export default function AlbumCard({
   },
   cardType,
 }: Props) {
+  const { mutate } = api.albums.removeAlbum.useMutation()
   function handleRemoveClick(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault()
-    handler(album)
+    mutate(album.id)
   }
   function handleAddClick(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault()

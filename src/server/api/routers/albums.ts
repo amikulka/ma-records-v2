@@ -5,6 +5,7 @@ import {
   privateProcedure,
   publicProcedure,
 } from '@/server/api/trpc'
+import { User } from '@clerk/nextjs/dist/api'
 
 export const albumsRouter = createTRPCRouter({
   getAll: publicProcedure
@@ -55,6 +56,25 @@ export const albumsRouter = createTRPCRouter({
         album,
         UserAlbum,
       }
+    }),
+  removeAlbum: privateProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.userId
+      const UserAlbum = await ctx.prisma.usersAlbums.findFirst({
+        where: {
+          ownerId: userId,
+          albumId: input,
+        },
+      })
+      if (UserAlbum !== null) {
+        await ctx.prisma.usersAlbums.delete({
+          where: {
+            id: UserAlbum.id,
+          },
+        })
+      }
+      return UserAlbum
     }),
 })
 
