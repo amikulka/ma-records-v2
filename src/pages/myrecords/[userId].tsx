@@ -12,7 +12,7 @@ export default function MyRecords() {
   const currentUserId = user?.id
   try {
     if (typeof userId !== 'string') throw new Error('Invalid User Id')
-    const { data, isLoading, isError } = api.albums.getAll.useQuery({ userId })
+    const { data, isLoading } = api.albums.getAll.useQuery({ userId })
 
     return (
       <>

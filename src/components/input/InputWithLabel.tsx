@@ -9,7 +9,7 @@ export default function InputWithLabel({
   query,
 }: Props) {
   return (
-    <div className="relative rounded-md border-b border-gray-500 px-3 py-2 focus-within:border-gray-300">
+    <div className="relative w-full rounded-md border-b border-gray-500 px-3 py-2 focus-within:border-gray-300">
       <input
         type="text"
         name="name"
