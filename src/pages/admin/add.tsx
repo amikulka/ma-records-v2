@@ -6,6 +6,7 @@ import SimpleNotification from '@/components/notification/SimpleNotification'
 import Head from 'next/head'
 import type { AlbumInfoFromAPI, AlbumToAdd } from '@/utils/types'
 import { api } from '@/utils/api'
+import LoadingSpinner from '@/components/loading/LoadingSpinner'
 
 export default function AddAlbum() {
   const [artistSearch, setArtistSearch] = useState('')
@@ -14,6 +15,7 @@ export default function AddAlbum() {
     AlbumInfoFromAPI[] | null
   >(null)
   const [show, setShow] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const { mutate } = api.albums.addAlbum.useMutation()
   function handleArtistChange(e: React.FormEvent<HTMLInputElement>) {
     setArtistSearch(e.currentTarget.value)
@@ -47,6 +49,8 @@ export default function AddAlbum() {
   }
 
   function searchForAlbums(artist: string, album: string) {
+    setIsLoading(true)
+    setAlbumSearchList([])
     axios
       .get(`/api/mb_album_info`, {
         params: {
@@ -55,8 +59,10 @@ export default function AddAlbum() {
         },
       })
       .then((results: AxiosResponse<AlbumInfoFromAPI[]>) => {
-        console.log(results.data)
         setAlbumSearchList(results.data)
+      })
+      .then(() => {
+        setIsLoading(false)
       })
       .catch((err) => console.log(err))
   }
@@ -79,7 +85,13 @@ export default function AddAlbum() {
           albumSearchList={albumSearchList}
           handleClearClick={handleClearClick}
         />
-
+        {isLoading && (
+          <div className="flex h-96 flex-col items-center justify-center">
+            <div className="flex flex-wrap justify-center md:justify-start">
+              <LoadingSpinner />
+            </div>
+          </div>
+        )}
         {albumSearchList && (
           <SearchResultsList
             albumSearchList={albumSearchList}

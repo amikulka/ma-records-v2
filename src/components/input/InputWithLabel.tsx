@@ -10,12 +10,6 @@ export default function InputWithLabel({
 }: Props) {
   return (
     <div className="relative rounded-md border-b border-gray-500 px-3 py-2 focus-within:border-gray-300">
-      {/* <label
-        htmlFor="name"
-        className="absolute -top-2 left-2 -mt-px inline-block px-1 text-xs font-medium text-gray-100"
-      >
-        {label}
-      </label> */}
       <input
         type="text"
         name="name"

@@ -27,7 +27,7 @@ export default function SearchResultsList({
             return results.data as string
           })
           .catch((err) => {
-            console.log(err)
+            console.error(err)
           })
       })
     )
