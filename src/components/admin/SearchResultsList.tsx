@@ -13,7 +13,16 @@ export default function SearchResultsList({
   albumSearchList,
   handleAdd,
 }: Props) {
-  const [displayList, setDisplayList] = useState<Albums[] | null>(null)
+  const [displayList, setDisplayList] = useState<Albums[] | null>(
+    albumSearchList.map((album, index) => {
+      return {
+        ...album,
+        createdAt: new Date(),
+        id: index.toString(),
+        art_url: '/album_placeholder',
+      }
+    })
+  )
   useEffect(() => {
     Promise.all(
       albumSearchList.map((album) => {
