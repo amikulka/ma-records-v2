@@ -22,7 +22,7 @@ export default function AddRecordForm({
   handleClearClick,
 }: Props) {
   return (
-    <div className="mt-8 flex flex-col items-center">
+    <div className="mt-8 flex flex-col items-center gap-6">
       <div className="w-80">
         <InputWithLabel
           placeholder={'Artist name'}
