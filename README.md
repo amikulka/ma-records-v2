@@ -35,10 +35,8 @@ CLERK_SECRET_KEY=
 <img width="800" alt="Gif of add album screen" src="http://g.recordit.co/oMjkbn6D3r.gif">
 <br>
 
-- user can click "My Albums" to navigate back to their record collection and from there they can remove any albums as necessary:
 
-<img width="800" alt="Gif of add album screen" src="http://g.recordit.co/5M260jXHHo.gif">
-<br>
+
 
 
 
