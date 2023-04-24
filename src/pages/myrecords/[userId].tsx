@@ -1,5 +1,5 @@
 import { type RouterOutputs, api } from '@/utils/api'
-import { useUser } from '@clerk/nextjs'
+import { SignedIn, SignedOut, useUser } from '@clerk/nextjs'
 import { useRouter } from 'next/router'
 import AlbumCard from '@/components/albumCard/AlbumCard'
 import Head from 'next/head'
@@ -7,6 +7,7 @@ import LoadingSpinner from '@/components/loading/LoadingSpinner'
 import InputWithLabel from '@/components/input/InputWithLabel'
 import { useEffect, useMemo, useState } from 'react'
 import type { Albums } from '@prisma/client'
+import Link from 'next/link'
 
 type AlbumsAndInfo = RouterOutputs['albums']['getAll']
 type AlbumAndInfo = {
@@ -69,6 +70,29 @@ export default function MyRecords() {
                 cardType={currentUserId === userId ? 'remove' : 'display'}
               />
             ))}
+
+          <SignedIn>
+            {!isLoading && albumList.length === 0 && (
+              <div className="flex flex-col items-center justify-center text-xl">
+                <div>No albums added yet!</div>
+                <div>
+                  Click{' '}
+                  <Link href={'/admin/add'} className="underline">
+                    here
+                  </Link>{' '}
+                  to add albums
+                </div>
+              </div>
+            )}
+          </SignedIn>
+          <SignedOut>
+            {!isLoading && albumList.length === 0 && (
+              <div className="flex flex-col items-center justify-center text-xl">
+                <div>This user has not added any albums yet!</div>
+                <div>Check back later</div>
+              </div>
+            )}
+          </SignedOut>
         </div>
       </main>
     </>
