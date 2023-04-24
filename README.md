@@ -35,6 +35,23 @@ CLERK_SECRET_KEY=
 <img width="800" alt="Gif of add album screen" src="http://g.recordit.co/oMjkbn6D3r.gif">
 <br>
 
+- User can navigate to "My Albums" and view all their albums, and remove any albums as necessary:
+
+<img width="800" alt="gif of home screen and removing album" src="https://user-images.githubusercontent.com/47989035/234118255-d45360d6-db6e-4a64-9f57-2ee356e2c7eb.gif">
+<br>
+
+- User can search for albums in their collection by both album name and artist:
+
+<img width="800" alt="gif of searching for albums" src="https://user-images.githubusercontent.com/47989035/234119116-aa1bf696-cd2f-49ce-939a-a93963d2dcc3.gif">
+
+- Signed-out users and other users can still view a collection at the same url (without the ability to remove albums):
+
+<img width="800" alt="album list when signed out" src="https://user-images.githubusercontent.com/47989035/234120021-50d17e55-fcaa-4f93-85c2-daa44d614cb8.gif">
+
+
+- Mobile view is also available!
+
+<img height="800" alt="album list when signed out" src="https://user-images.githubusercontent.com/47989035/234120450-9e25c677-4154-43ff-94b1-f37c588b5167.gif">
 
 
 
