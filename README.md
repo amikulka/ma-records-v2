@@ -19,6 +19,29 @@ CLERK_SECRET_KEY=
 - run `npm install && npx prisma db push && npm run dev`
 - open project at http://localhost:3000
 
+# Sample Videos / User Interface
+- Redirected to login when user first arrives at homepage (https://marecords.vercel.app)
+
+<img width="700" alt="Screenshot 2023-04-24 at 11 24 52 AM" src="https://user-images.githubusercontent.com/47989035/234095172-54bcb3df-e6cb-49c1-b461-0105473e6225.png">
+<br>
+
+- After login, if users have no albums, they will be prompted to add albums to thier list:
+
+<img width="800" alt="homescreen with no albums" src="http://g.recordit.co/3t2XKyKAIF.gif">
+<br>
+
+- User can navigate to the 'Add Albums' screen and search for their favorite albums and add them to their personal collection:
+
+<img width="800" alt="Gif of add album screen" src="http://g.recordit.co/oMjkbn6D3r.gif">
+<br>
+
+- user can click "My Albums" to navigate back to their record collection and from there they can remove any albums as necessary:
+
+<img width="800" alt="Gif of add album screen" src="http://g.recordit.co/5M260jXHHo.gif">
+<br>
+
+
+
 # Created with Create T3 App
 
 This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
