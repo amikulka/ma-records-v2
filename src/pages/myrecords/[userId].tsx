@@ -1,28 +1,54 @@
 import { type RouterOutputs, api } from '@/utils/api'
 import { SignedIn, SignedOut, useUser } from '@clerk/nextjs'
-import { useRouter } from 'next/router'
 import AlbumCard from '@/components/albumCard/AlbumCard'
 import Head from 'next/head'
-import LoadingSpinner from '@/components/loading/LoadingSpinner'
 import InputWithLabel from '@/components/input/InputWithLabel'
 import { useEffect, useMemo, useState } from 'react'
-import type { Albums } from '@prisma/client'
 import Link from 'next/link'
+import { createServerSideHelpers } from '@trpc/react-query/server'
+import { prisma } from '@/server/db'
+import { appRouter } from '@/server/api/root'
+import superjson from 'superjson'
 
+import type { Albums } from '@prisma/client'
+import type { GetStaticProps, NextPage } from 'next'
 type AlbumsAndInfo = RouterOutputs['albums']['getAll']
 type AlbumAndInfo = {
   album: Albums
 }
+
 function sortAlphabetically(a: AlbumAndInfo, b: AlbumAndInfo) {
   return a.album.artist
     .toLowerCase()
     .localeCompare(b.album.artist.toLowerCase())
 }
 
-export default function MyRecords() {
-  const router = useRouter()
+export const getStaticProps: GetStaticProps = async (context) => {
+  const ssg = createServerSideHelpers({
+    router: appRouter,
+    ctx: { prisma, userId: null },
+    transformer: superjson,
+  })
+
+  const userId = context.params?.userId
+
+  if (typeof userId !== 'string') throw new Error('no user id supplied')
+
+  await ssg.albums.getAll.prefetch({ userId })
+
+  return {
+    props: {
+      trpcState: ssg.dehydrate(),
+      userId,
+    },
+  }
+}
+export const getStaticPaths = () => {
+  return { paths: [], fallback: 'blocking' }
+}
+
+const MyRecords: NextPage<{ userId: string }> = ({ userId }) => {
   const { user } = useUser()
-  const { userId } = router.query as { userId: string }
   const currentUserId = user?.id
   const [searchQuery, setSearchQuery] = useState('')
   const [albumList, setAlbumList] = useState<AlbumsAndInfo>([])
@@ -30,7 +56,7 @@ export default function MyRecords() {
     setSearchQuery(e.currentTarget.value)
   }
 
-  const { data, isLoading } = api.albums.getAll.useQuery({ userId })
+  const { data } = api.albums.getAll.useQuery({ userId })
   useEffect(() => {
     if (data) {
       setAlbumList(data.sort(sortAlphabetically))
@@ -61,7 +87,7 @@ export default function MyRecords() {
           />
         </div>
         <div className="flex flex-wrap justify-center md:justify-start">
-          {isLoading && <LoadingSpinner />}
+          {/* {isLoading && <LoadingSpinner />} */}
           {filteredAlbums &&
             filteredAlbums.map((album) => (
               <AlbumCard
@@ -72,7 +98,7 @@ export default function MyRecords() {
             ))}
 
           <SignedIn>
-            {!isLoading && albumList.length === 0 && (
+            {albumList.length === 0 && (
               <div className="flex flex-col items-center justify-center text-xl">
                 <div>No albums added yet!</div>
                 <div>
@@ -86,7 +112,7 @@ export default function MyRecords() {
             )}
           </SignedIn>
           <SignedOut>
-            {!isLoading && albumList.length === 0 && (
+            {albumList.length === 0 && (
               <div className="flex flex-col items-center justify-center text-xl">
                 <div>This user has not added any albums yet!</div>
                 <div>Check back later</div>
@@ -99,30 +125,4 @@ export default function MyRecords() {
   )
 }
 
-import { createServerSideHelpers } from '@trpc/react-query/server'
-import { prisma } from '@/server/db'
-import { appRouter } from '@/server/api/root'
-import superjson from 'superjson'
-import type { GetStaticProps } from 'next'
-export const getStaticProps: GetStaticProps = async (context) => {
-  const ssg = createServerSideHelpers({
-    router: appRouter,
-    ctx: { prisma, userId: null },
-    transformer: superjson,
-  })
-
-  const userId = context.params?.userId
-
-  if (typeof userId !== 'string') throw new Error('no user id supplied')
-
-  await ssg.albums.getAll.prefetch({ userId })
-
-  return {
-    props: {
-      trpcState: ssg.dehydrate(),
-    },
-  }
-}
-export const getStaticPaths = () => {
-  return { paths: [], fallback: 'blocking' }
-}
+export default MyRecords

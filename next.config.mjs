@@ -28,5 +28,6 @@ const config = {
     locales: ['en'],
     defaultLocale: 'en',
   },
+  swcMinify: true,
 }
 export default config
