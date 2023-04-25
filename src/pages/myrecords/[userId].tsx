@@ -98,3 +98,31 @@ export default function MyRecords() {
     </>
   )
 }
+
+import { createServerSideHelpers } from '@trpc/react-query/server'
+import { prisma } from '@/server/db'
+import { appRouter } from '@/server/api/root'
+import superjson from 'superjson'
+import type { GetStaticProps } from 'next'
+export const getStaticProps: GetStaticProps = async (context) => {
+  const ssg = createServerSideHelpers({
+    router: appRouter,
+    ctx: { prisma, userId: null },
+    transformer: superjson,
+  })
+
+  const userId = context.params?.userId
+
+  if (typeof userId !== 'string') throw new Error('no user id supplied')
+
+  await ssg.albums.getAll.prefetch({ userId })
+
+  return {
+    props: {
+      trpcState: ssg.dehydrate(),
+    },
+  }
+}
+export const getStaticPaths = () => {
+  return { paths: [], fallback: 'blocking' }
+}
